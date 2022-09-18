@@ -61,6 +61,12 @@ main {
     cursor: pointer;
 }
 
+.meme--image {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px;
+}
+
 /* 
   .form--input {
     font-family: "Karla", sans-serif;
