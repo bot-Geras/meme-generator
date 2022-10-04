@@ -1,13 +1,25 @@
-import memesData from "../data/memesData"
-import { useState } from "react"
+
+import { useState, useEffect } from "react"
 
 export default function Meme() {
-    const [allMemeImages, setAllMemeImages] = useState(memesData)
+    
     const [memes, setMemes] = useState({
         topText: "",
         bottomText: "",
         randomImage: "http://i.imgflip.com/1bij.jpg" 
     })
+
+    const [allMemes, setAllMemes] = useState([])
+
+    useEffect(() => {
+        fetch("https://api.imgflip.com/get_memes")
+            .then(res => res.json())
+            .then(data => setAllMemes(data.data.memes))
+    }, [])
+
+    
+
+
     
     function handleChange(event) {
         const {name, value} = event.target
@@ -19,11 +31,11 @@ export default function Meme() {
     }
 
     function getMemeImage() {
-        const memeArray = allMemeImages.data.memes
-        const randomNumber = Math.floor(Math.random() * memeArray.length)
+        
+        const randomNumber = Math.floor(Math.random() * allMemes.length)
         // const url = memeArray[randomNumber].url
         // console.log(url)
-        const url = memeArray[randomNumber].url
+        const url = allMemes[randomNumber].url
         setMemes(prevMemes => ({
             ...prevMemes,
             randomImage: url
@@ -36,8 +48,8 @@ export default function Meme() {
     return (
         <main>
             <div className="form">
-                <input type="text" onChange={handleChange} name="topText" placeholder="Top Text" className="input--form" />
-                <input type="text" onChange={handleChange} name="bottomText" placeholder="Bottom Text" className="input--form" />
+                <input type="text" value={memes.topText} onChange={handleChange} name="topText" placeholder="Top Text" className="input--form" />
+                <input type="text" value={memes.bottomText} onChange={handleChange} name="bottomText" placeholder="Bottom Text" className="input--form" />
                 <button 
                 className="form--button"
                 onClick={getMemeImage}
